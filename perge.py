@@ -1,5 +1,13 @@
 from pypdf import PdfWriter
+
 import argparse
+import shutil
+
+
+def copy_pdf(src: list[str]) -> None:
+    for file in src:
+        dst = "copy_of_" + file
+        shutil.copy2(file, dst)
 
 
 def merge(files: list[str], outfile: str = "merged_pdf.pdf") -> None:
@@ -50,21 +58,23 @@ def main():
 
     args = parser.parse_args()
 
-    if args.copy:
-        # TODO
-        print("TODO")
-
     if args.merge:
         if len(args.files) <= 1:
             raise Exception(
                 f"2 or more pdf`s needed to merge them together: {len(args.files)} provided"
             )
 
+        if args.copy:
+            copy_pdf(args.files)
+
         if args.outfile:
             merge(args.files, outfile=args.outfile)
         else:
             merge(args.files)
     elif args.split:
+        if args.copy:
+            copy_pdf(args.files)
+
         print("This is a PDF splitter")
     else:
         parser.print_help()
