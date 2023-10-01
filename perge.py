@@ -17,22 +17,42 @@ def main():
         prog="Perge", description="PDF Tool", epilog="leann.phydon@gmail.com"
     )
 
-    parser.add_argument("files", action="extend", nargs="+", type=str)
-    parser.add_argument("--outfile", "-o", action="store", nargs="?", type=str)
+    parser.add_argument(
+        "files",
+        action="extend",
+        nargs="+",
+        type=str,
+        help="the pdf files to work with",
+    )
+    parser.add_argument(
+        "--outfile",
+        "-o",
+        action="store",
+        nargs="?",
+        type=str,
+        help="provide a custom name for the output file",
+    )
+    parser.add_argument(
+        "--copy",
+        "-c",
+        action="store_true",
+        help="make a copy of the provided files before working with them",
+    )
 
     # groups conflict with each other
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--merge", "-m", action="store_true", help="Merge pdf`s")
-    group.add_argument("--split", "-s", action="store_true", help="Split pdf`s")
+    group.add_argument("--merge", "-m", action="store_true", help="merge pdf`s")
+    group.add_argument("--split", "-s", action="store_true", help="split pdf`s")
 
-    parser.add_argument(
-        "--echo", "-e", action="store_true", help="Prints a message"
-    )
     parser.add_argument(
         "--version", "-V", action="version", version="%(prog)s 1.0.0"
     )
 
     args = parser.parse_args()
+
+    if args.copy:
+        # TODO
+        print("TODO")
 
     if args.merge:
         if len(args.files) <= 1:
@@ -46,8 +66,6 @@ def main():
             merge(args.files)
     elif args.split:
         print("This is a PDF splitter")
-    elif args.echo:
-        print("This echos")
     else:
         parser.print_help()
 
